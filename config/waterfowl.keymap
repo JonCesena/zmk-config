@@ -1,17 +1,9 @@
 /*
  * Waterfowl - left half as a Clip Studio Paint controller
  *
- * One layer. 40 keys: 4 rows of (5 left keys, 5 right keys).
+ * Two layers. Z toggles between them.
+ * Each layer lists 40 keys: 4 rows of (5 left keys, 5 right keys).
  * The right half is unused, so its keys are &none.
- *
- * ,------------------------------------------------.
- * | Save   | Cut    | Copy   | Paste  | New raster |
- * |--------+--------+--------+--------+------------|
- * |Deselect|Select  | Pen    | Brush  | G (Fill)   |
- * |--------+--------+--------+--------+------------|
- * | Z      | X      | C      |Swap col| B          |
- * `------------------------------------------------'
- *  | Fit to screen | Redo | Space | Undo | Reset rotation |
  *
  * Sensors (encoders), in this order:
  *   left roller, left dial, right dial, right roller
@@ -20,27 +12,64 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 
+#define CSP  0
+#define CSP2 1
+
+// Roller: zoom (Ctrl+- / Ctrl+=)
+// Dial:   rotate (- / ')
+#define CSP_SENSORS \
+    sensor-bindings = < \
+        &inc_dec_kp LC(MINUS) LC(EQUAL) \
+        &inc_dec_kp MINUS SQT \
+        &inc_dec_kp C_VOL_UP C_VOL_DN    /* right dial: unused */ \
+        &inc_dec_kp C_VOL_UP C_VOL_DN    /* right roller: unused */ \
+    >;
+
 / {
     keymap {
         compatible = "zmk,keymap";
 
+/* Layer 1: CSP
+ * ,------------------------------------------------.
+ * | Save   | Cut    | Copy   | Paste  | New raster |
+ * |--------+--------+--------+--------+------------|
+ * |Deselect|Select  | Pen    | Brush  | G (Fill)   |
+ * |--------+--------+--------+--------+------------|
+ * |LAYER 2 |Swap col| C      |Brush - | Brush +    |
+ * `------------------------------------------------'
+ *  | Fit to screen | Redo | Space | Undo | Reset rotation |
+ */
         csp_layer {
             display-name = "CSP";
             bindings = <
 &kp LC(S)    &kp LC(X)    &kp LC(C)    &kp LC(V)    &kp LC(LS(N))      &none &none &none &none &none
 &kp LC(D)    &kp M        &kp P        &kp B        &kp G              &none &none &none &none &none
-&kp Z        &kp X        &kp C        &kp X        &kp B              &none &none &none &none &none
+&tog CSP2    &kp X        &kp C        &kp LBKT     &kp RBKT           &none &none &none &none &none
 &kp LC(N0)   &kp LC(Y)    &kp SPACE    &kp LC(Z)    &kp LC(LS(N1))     &none &none &none &none &none
             >;
+            CSP_SENSORS
+        };
 
-            // Roller: zoom (Ctrl+- / Ctrl+=)
-            // Dial:   rotate (- / ')
-            sensor-bindings = <
-                &inc_dec_kp LC(MINUS) LC(EQUAL)
-                &inc_dec_kp MINUS SQT
-                &inc_dec_kp C_VOL_UP C_VOL_DN    /* right dial: unused */
-                &inc_dec_kp C_VOL_UP C_VOL_DN    /* right roller: unused */
+/* Layer 2: empty for now
+ * &trans = same as layer 1. Z switches back to layer 1.
+ * ,------------------------------------------------.
+ * | ---    | ---    | ---    | ---    | ---        |
+ * |--------+--------+--------+--------+------------|
+ * | ---    | ---    | ---    | ---    | ---        |
+ * |--------+--------+--------+--------+------------|
+ * |LAYER 1 | ---    | ---    | ---    | ---        |
+ * `------------------------------------------------'
+ *  |  ---  |  ---  |  ---  |  ---  |  ---  |
+ */
+        csp2_layer {
+            display-name = "CSP2";
+            bindings = <
+&trans       &trans       &trans       &trans       &trans             &none &none &none &none &none
+&trans       &trans       &trans       &trans       &trans             &none &none &none &none &none
+&tog CSP2    &trans       &trans       &trans       &trans             &none &none &none &none &none
+&trans       &trans       &trans       &trans       &trans             &none &none &none &none &none
             >;
+            CSP_SENSORS
         };
     };
 };
