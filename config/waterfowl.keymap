@@ -11,6 +11,16 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 
+/* Enable the left half's roller and dial (they are disabled by default).
+ * These must be in the keymap, which loads after the shield definition. */
+&roller_left_encoder {
+    status = "okay";
+};
+
+&dial_left_encoder {
+    status = "okay";
+};
+
 #define QWERTY 0
 #define NAVNUM 1
 #define SYM    2
