@@ -16,11 +16,11 @@
 #define SYM    2
 #define FUNC   3
 
-// Roller: roll right = zoom in (Ctrl+=), roll left = zoom out (Ctrl+-)
+// Roller: roll right = zoom in (Ctrl+=), roll left = zoom out (Ctrl+-)  [order swapped to match hardware]
 // Dial:   clockwise = rotate right ('), counter-clockwise = rotate left (-)
 #define CSP_SENSORS \
     sensor-bindings = < \
-        &inc_dec_kp LC(EQUAL) LC(MINUS) \
+        &inc_dec_kp LC(MINUS) LC(EQUAL) \
         &inc_dec_kp SQT MINUS \
         &inc_dec_kp C_VOL_UP C_VOL_DN    /* right dial: unused */ \
         &inc_dec_kp C_VOL_UP C_VOL_DN    /* right roller: unused */ \
