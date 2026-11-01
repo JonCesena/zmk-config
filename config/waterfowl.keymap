@@ -11,16 +11,6 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 
-/* Enable the left half's roller and dial (they are disabled by default).
- * These must be in the keymap, which loads after the shield definition. */
-&roller_left_encoder {
-    status = "okay";
-};
-
-&dial_left_encoder {
-    status = "okay";
-};
-
 #define QWERTY 0
 #define NAVNUM 1
 #define SYM    2
@@ -32,8 +22,8 @@
     sensor-bindings = < \
         &inc_dec_kp LC(EQUAL) LC(MINUS) \
         &inc_dec_kp SQT MINUS \
-        &none \
-        &none \
+        &inc_dec_kp C_VOL_UP C_VOL_DN    /* right dial: unused */ \
+        &inc_dec_kp C_VOL_UP C_VOL_DN    /* right roller: unused */ \
     >;
 
 / {
