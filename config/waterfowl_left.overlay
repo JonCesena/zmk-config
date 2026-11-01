@@ -1,0 +1,8 @@
+/* Enable the left half's roller and dial (they are disabled by default) */
+&roller_left_encoder {
+    status = "okay";
+};
+
+&dial_left_encoder {
+    status = "okay";
+};

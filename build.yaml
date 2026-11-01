@@ -1,0 +1,6 @@
+# What GitHub Actions builds. Only the left half is used.
+include:
+  - board: nice_nano_v2
+    shield: waterfowl_left
+  - board: nice_nano_v2
+    shield: settings_reset
