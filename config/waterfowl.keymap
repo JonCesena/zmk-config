@@ -1,8 +1,17 @@
 /*
  * Waterfowl - left half as a Clip Studio Paint controller
  *
- * Each layer lists 40 keys: 4 rows of (5 left keys, 5 right keys).
+ * One layer. 40 keys: 4 rows of (5 left keys, 5 right keys).
  * The right half is unused, so its keys are &none.
+ *
+ * ,------------------------------------------------.
+ * | Save   | Cut    | Copy   | Paste  | New raster |
+ * |--------+--------+--------+--------+------------|
+ * |Deselect|Select  | Pen    | Brush  | G (Fill)   |
+ * |--------+--------+--------+--------+------------|
+ * | Z      | X      | C      |Swap col| B          |
+ * `------------------------------------------------'
+ *  | Fit to screen | Redo | Space | Undo | Reset rotation |
  *
  * Sensors (encoders), in this order:
  *   left roller, left dial, right dial, right roller
@@ -11,67 +20,27 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 
-#define QWERTY 0
-#define NAVNUM 1
-#define SYM    2
-#define FUNC   3
-
-// Roller: roll right = zoom in (Ctrl+=), roll left = zoom out (Ctrl+-)
-// Dial:   clockwise = rotate right ('), counter-clockwise = rotate left (-)
-#define CSP_SENSORS \
-    sensor-bindings = < \
-        &inc_dec_kp LC(MINUS) LC(EQUAL) \
-        &inc_dec_kp MINUS SQT \
-        &inc_dec_kp C_VOL_UP C_VOL_DN    /* right dial: unused */ \
-        &inc_dec_kp C_VOL_UP C_VOL_DN    /* right roller: unused */ \
-    >;
-
 / {
     keymap {
         compatible = "zmk,keymap";
 
-        qwerty_layer {
-            display-name = "QWERTY";
+        csp_layer {
+            display-name = "CSP";
             bindings = <
-&kp Q        &kp W        &kp E        &kp R        &kp T              &none &none &none &none &none
-&mt LGUI A   &mt LALT S   &mt LCTRL D  &mt LSHFT F  &kp G              &none &none &none &none &none
-&kp Z        &kp X        &kp C        &kp V        &kp B              &none &none &none &none &none
-&kp LC(N0)   &lt FUNC DEL &lt NAVNUM SPACE &kp LC(Z) &kp LC(LS(N1))   &none &none &none &none &none
+&kp LC(S)    &kp LC(X)    &kp LC(C)    &kp LC(V)    &kp LC(LS(N))      &none &none &none &none &none
+&kp LC(D)    &kp M        &kp P        &kp B        &kp G              &none &none &none &none &none
+&kp Z        &kp X        &kp C        &kp X        &kp B              &none &none &none &none &none
+&kp LC(N0)   &kp LC(Y)    &kp SPACE    &kp LC(Z)    &kp LC(LS(N1))     &none &none &none &none &none
             >;
-            CSP_SENSORS
-        };
 
-        navnum_layer {
-            display-name = "NAVNUM";
-            bindings = <
-&none        &kp PG_UP    &kp UP       &kp PG_DN    &none              &none &none &none &none &none
-&kp HOME     &kp LEFT     &kp DOWN     &kp RIGHT    &kp END            &none &none &none &none &none
-&none        &none        &kp INS      &none        &none              &none &none &none &none &none
-&kp N1       &lt FUNC DEL &lt NAVNUM SPACE &kp TAB  &kp CAPS           &none &none &none &none &none
+            // Roller: zoom (Ctrl+- / Ctrl+=)
+            // Dial:   rotate (- / ')
+            sensor-bindings = <
+                &inc_dec_kp LC(MINUS) LC(EQUAL)
+                &inc_dec_kp MINUS SQT
+                &inc_dec_kp C_VOL_UP C_VOL_DN    /* right dial: unused */
+                &inc_dec_kp C_VOL_UP C_VOL_DN    /* right roller: unused */
             >;
-            CSP_SENSORS
-        };
-
-        sym_layer {
-            display-name = "SYM";
-            bindings = <
-&kp PRCNT    &kp AT       &kp LBKT     &kp RBKT     &kp BSLH           &none &none &none &none &none
-&kp HASH     &kp EXCL     &kp LPAR     &kp RPAR     &kp PIPE           &none &none &none &none &none
-&kp DLLR     &none        &kp LBRC     &kp RBRC     &kp AMPS           &none &none &none &none &none
-&kp N1       &lt FUNC DEL &lt NAVNUM SPACE &kp TAB  &kp CAPS           &none &none &none &none &none
-            >;
-            CSP_SENSORS
-        };
-
-        func_layer {
-            display-name = "FUNC";
-            bindings = <
-&none        &none        &none        &none        &none              &none &none &none &none &none
-&none        &none        &none        &none        &none              &none &none &none &none &none
-&bootloader  &none        &none        &none        &none              &none &none &none &none &none
-&kp N1       &lt FUNC DEL &lt NAVNUM SPACE &kp TAB  &kp CAPS           &none &none &none &none &none
-            >;
-            CSP_SENSORS
         };
     };
 };
