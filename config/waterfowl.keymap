@@ -33,7 +33,7 @@
  * ,------------------------------------------------.
  * | Save   | Cut    | Copy   | Paste  | New raster |
  * |--------+--------+--------+--------+------------|
- * |Deselect|Select  | Pen    | Brush  | G (Fill)   |
+ * |Deselect|Select  | Pen    | Brush  | Flip canvas|
  * |--------+--------+--------+--------+------------|
  * |LAYER 2 |Swap col| C      |Brush - | Brush +    |
  * `------------------------------------------------'
@@ -43,7 +43,7 @@
             display-name = "CSP";
             bindings = <
 &kp LC(S)    &kp LC(X)    &kp LC(C)    &kp LC(V)    &kp LC(LS(N))      &none &none &none &none &none
-&kp LC(D)    &kp M        &kp P        &kp B        &kp G              &none &none &none &none &none
+&kp LC(D)    &kp M        &kp P        &kp B        &kp LC(LA(LS(H)))  &none &none &none &none &none
 &tog CSP2    &kp X        &kp C        &kp LBKT     &kp RBKT           &none &none &none &none &none
 &kp LC(N0)   &kp LC(Y)    &kp SPACE    &kp LC(Z)    &kp LC(LS(N1))     &none &none &none &none &none
             >;
