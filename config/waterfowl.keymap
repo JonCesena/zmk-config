@@ -1,7 +1,7 @@
 /*
  * Waterfowl - left half as a Clip Studio Paint controller
  *
- * Two layers. Z toggles between them.
+ * Two layers: CSP and ANIM. Z toggles between them.
  * Each layer lists 40 keys: 4 rows of (5 left keys, 5 right keys).
  * The right half is unused, so its keys are &none.
  *
@@ -21,6 +21,20 @@
     sensor-bindings = < \
         &inc_dec_kp LC(MINUS) LC(EQUAL) \
         &inc_dec_kp MINUS SQT \
+        &inc_dec_kp C_VOL_UP C_VOL_DN    /* right dial: unused */ \
+        &inc_dec_kp C_VOL_UP C_VOL_DN    /* right roller: unused */ \
+    >;
+
+// Animation shortcuts: Ctrl+Alt+Shift+key (assign these in CSP Shortcut Settings)
+#define ANIM(k) LC(LA(LS(k)))
+
+// Layer 2 encoders
+// Roller: zoom (same as layer 1)
+// Dial:   previous frame / next frame
+#define ANIM_SENSORS \
+    sensor-bindings = < \
+        &inc_dec_kp LC(MINUS) LC(EQUAL) \
+        &inc_dec_kp ANIM(LBKT) ANIM(RBKT) \
         &inc_dec_kp C_VOL_UP C_VOL_DN    /* right dial: unused */ \
         &inc_dec_kp C_VOL_UP C_VOL_DN    /* right roller: unused */ \
     >;
@@ -50,26 +64,26 @@
             CSP_SENSORS
         };
 
-/* Layer 2: empty for now
- * &trans = same as layer 1. Z switches back to layer 1.
- * ,------------------------------------------------.
- * | ---    | ---    | ---    | ---    | ---        |
- * |--------+--------+--------+--------+------------|
- * | ---    | ---    | ---    | ---    | ---        |
- * |--------+--------+--------+--------+------------|
- * |LAYER 1 | ---    | ---    | ---    | ---        |
- * `------------------------------------------------'
- *  |  ---  |  ---  |  ---  |  ---  |  ---  |
+/* Layer 2: ANIMATION  (*) = same as layer 1
+ * ,------------------------------------------------------------.
+ * | Play/pause | To start   | Prev draw  | Next draw  | New cel    |
+ * |------------+------------+------------+------------+------------|
+ * | Onion skin | Light table| Pen (*)    | Brush (*)  | Flip (*)   |
+ * |------------+------------+------------+------------+------------|
+ * | LAYER 1    | Add frame  | Remove frm | Brush - (*)| Brush + (*)|
+ * `------------------------------------------------------------'
+ *  | Fit (*) | Redo (*) | Space (*) | Undo (*) | Timeline |
+ * Dial = previous / next frame. Roller = zoom.
  */
-        csp2_layer {
-            display-name = "CSP2";
+        anim_layer {
+            display-name = "ANIM";
             bindings = <
-&trans       &trans       &trans       &trans       &trans             &none &none &none &none &none
-&trans       &trans       &trans       &trans       &trans             &none &none &none &none &none
-&tog CSP2    &trans       &trans       &trans       &trans             &none &none &none &none &none
-&trans       &trans       &trans       &trans       &trans             &none &none &none &none &none
+&kp ANIM(P)      &kp ANIM(S)      &kp ANIM(COMMA)  &kp ANIM(DOT)    &kp ANIM(N)        &none &none &none &none &none
+&kp ANIM(O)      &kp ANIM(L)      &trans           &trans           &trans             &none &none &none &none &none
+&tog CSP2        &kp ANIM(EQUAL)  &kp ANIM(MINUS)  &trans           &trans             &none &none &none &none &none
+&trans           &trans           &trans           &trans           &kp ANIM(T)        &none &none &none &none &none
             >;
-            CSP_SENSORS
+            ANIM_SENSORS
         };
     };
 };
